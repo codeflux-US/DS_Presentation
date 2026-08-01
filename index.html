@@ -1,45 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>DS Presentation</title>
-
-<link rel="stylesheet" href="style.css">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SYIT - DS Presentation</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
 
-<div class="container">
+  <div class="page-wrapper">
 
-<h1>DS Presentation</h1>
+    
+    <header class="site-header">
+      <img src="logo.png" alt="College Logo" class="college-logo" />
+      <h1 class="site-title">DS Presentation Registration</h1>
+      <p class="site-subtitle">Register your team for the Data Structures Presentation</p>
+    </header>
 
-<label>Select Number of Members</label>
+    
+    <main class="form-card">
 
-<select id="members" onchange="showFields()">
+      <form id="registrationForm" novalidate>
 
-<option value="">--Select--</option>
+        
+        <div class="form-group">
+          <label for="section">Select Section <span class="required">*</span></label>
+          <select id="section" name="section" required>
+            <option value="" disabled selected>Select Section</option>
+            <option value="Section A">Section A</option>
+            <option value="Section B">Section B</option>
+          </select>
+        </div>
 
-<option value="Solo">Solo</option>
+        
+        <div class="form-group hidden" id="teamSizeGroup">
+          <label for="teamSize">Select Number of Members <span class="required">*</span></label>
+          <select id="teamSize" name="teamSize" required>
+            <option value="" disabled selected>Select Number of Members</option>
+            <option value="Solo">Solo</option>
+            <option value="Five">Five</option>
+            <option value="Ten">Ten</option>
+          </select>
+        </div>
 
-<option value="Five">Five</option>
+        
+        <div id="membersContainer" class="members-container"></div>
 
-<option value="Ten">Ten</option>
+        
+        <button type="submit" id="submitBtn" class="submit-btn hidden">
+          <span class="btn-text">Submit Registration</span>
+          <span class="btn-spinner"></span>
+        </button>
 
-</select>
+      </form>
 
-<div id="names"></div>
+      
+      <div id="statusMessage" class="status-message hidden"></div>
 
-<button onclick="submitForm()">
-Submit
-</button>
+    </main>
 
-</div>
+    <footer class="site-footer">
+      <p>&copy; 2026 Department of Information Technology.</p>
+    </footer>
 
-<script src="script.js"></script>
+  </div>
 
+  <script src="script.js"></script>
 </body>
 </html>
