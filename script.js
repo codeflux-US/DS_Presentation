@@ -1,4 +1,4 @@
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzwGKfywGT0ytLrQ75EHnxLa8Yz-pCdoVKsUqCqZI1_xgWE4ZlE_vFT6jVaE3mLLoK-ZA/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxVenyJYqz9RNiidHW79CVTeV00yRFu5TZzHFmp5-bxVdHV_z_ovL0i6Yd1BGN39cRm0w/exec";
 
 
 const sectionSelect = document.getElementById("section");
