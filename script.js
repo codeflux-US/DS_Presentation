@@ -9,7 +9,6 @@ const submitBtn = document.getElementById("submitBtn");
 const form = document.getElementById("registrationForm");
 const statusMessage = document.getElementById("statusMessage");
 
-
 let isSubmitting = false;
 
 
