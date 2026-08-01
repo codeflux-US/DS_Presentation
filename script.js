@@ -1,5 +1,4 @@
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxVenyJYqz9RNiidHW79CVTeV00yRFu5TZzHFmp5-bxVdHV_z_ovL0i6Yd1BGN39cRm0w/exec";
-
+const SHEETDB_URL = "https://sheetdb.io/api/v1/9nfdvpa2aypak";
 
 const sectionSelect = document.getElementById("section");
 const teamSizeGroup = document.getElementById("teamSizeGroup");
@@ -11,25 +10,21 @@ const statusMessage = document.getElementById("statusMessage");
 
 let isSubmitting = false;
 
-
 const TEAM_SIZE_MAP = {
   Solo: 1,
   Five: 5,
   Ten: 10
 };
 
-
 sectionSelect.addEventListener("change", () => {
   if (sectionSelect.value) {
     teamSizeGroup.classList.remove("hidden");
   }
-  
   teamSizeSelect.value = "";
   membersContainer.innerHTML = "";
   submitBtn.classList.add("hidden");
   hideStatus();
 });
-
 
 teamSizeSelect.addEventListener("change", () => {
   const count = TEAM_SIZE_MAP[teamSizeSelect.value];
@@ -38,16 +33,13 @@ teamSizeSelect.addEventListener("change", () => {
   hideStatus();
 });
 
-
 function renderMemberFields(count) {
   membersContainer.innerHTML = "";
-
   if (!count) return;
 
   for (let i = 1; i <= count; i++) {
     const card = document.createElement("div");
     card.className = "member-card";
-
     const heading = count === 1 ? "Member Details" : `Member ${i}`;
 
     card.innerHTML = `
@@ -68,15 +60,13 @@ function renderMemberFields(count) {
   }
 }
 
-
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  if (isSubmitting) return; 
+  if (isSubmitting) return;
 
   hideStatus();
 
-  
   if (!form.checkValidity()) {
     form.reportValidity();
     return;
@@ -86,7 +76,7 @@ form.addEventListener("submit", async (e) => {
   const teamSize = teamSizeSelect.value;
   const count = TEAM_SIZE_MAP[teamSize];
 
-  const members = [];
+  const memberStrings = [];
   for (let i = 1; i <= count; i++) {
     const name = document.getElementById(`memberName${i}`).value.trim();
     const roll = document.getElementById(`memberRoll${i}`).value.trim();
@@ -95,30 +85,39 @@ form.addEventListener("submit", async (e) => {
       showStatus("Please fill in all member details.", "error");
       return;
     }
-    members.push({ name, roll });
+    memberStrings.push(`${name} (${roll})`);
   }
 
-  const payload = { section, teamSize, members };
+  const now = new Date();
+  const timestamp = formatTimestamp(now);
+
+  const payload = {
+    data: {
+      "Timestamp": timestamp,
+      "Section": section,
+      "Team Size": teamSize,
+      "Group Members": memberStrings.join(", ")
+    }
+  };
 
   setSubmitting(true);
 
   try {
-    const response = await fetch(WEB_APP_URL, {
+    const response = await fetch(SHEETDB_URL, {
       method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
 
-    const result = await response.json();
-
-    if (result.result === "success") {
+    if (response.ok) {
       showStatus("✅ Registration submitted successfully!", "success");
       form.reset();
       membersContainer.innerHTML = "";
       teamSizeGroup.classList.add("hidden");
       submitBtn.classList.add("hidden");
     } else {
-      showStatus(result.message || "Something went wrong. Please try again.", "error");
+      const errData = await response.json().catch(() => ({}));
+      showStatus(errData.message || "Something went wrong. Please try again.", "error");
     }
   } catch (err) {
     showStatus("Network error. Please check your connection and try again.", "error");
@@ -126,6 +125,18 @@ form.addEventListener("submit", async (e) => {
     setSubmitting(false);
   }
 });
+
+function formatTimestamp(date) {
+  const pad = (n) => String(n).padStart(2, "0");
+  const day = pad(date.getDate());
+  const month = pad(date.getMonth() + 1);
+  const year = date.getFullYear();
+  let hours = date.getHours();
+  const minutes = pad(date.getMinutes());
+  const ampm = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12 || 12;
+  return `${day}-${month}-${year} ${pad(hours)}:${minutes} ${ampm}`;
+}
 
 function setSubmitting(state) {
   isSubmitting = state;
