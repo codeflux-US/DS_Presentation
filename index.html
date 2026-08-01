@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>DS Presentation</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>DS Presentation</h1>
+
+<label>Select Number of Members</label>
+
+<select id="members" onchange="showFields()">
+
+<option value="">--Select--</option>
+
+<option value="Solo">Solo</option>
+
+<option value="Five">Five</option>
+
+<option value="Ten">Ten</option>
+
+</select>
+
+<div id="names"></div>
+
+<button onclick="submitForm()">
+Submit
+</button>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
